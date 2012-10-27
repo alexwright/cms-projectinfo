@@ -8,14 +8,13 @@
         return raw.map(rowMapCallback);
     }
 
-    function drawCommitActivity () {
-        var chart = new google.visualization.ColumnChart(document.getElementById('commit-activity')),
-            data = new google.visualization.DataTable(),
-            raw = window['activity'];
+    function drawCommitActivity (dataSource, chartDiv) {
+        var chart = new google.visualization.ColumnChart(chartDiv),
+            data = new google.visualization.DataTable();
 
         data.addColumn('date', "Week");
         data.addColumn('number', "Commits")
-        data.addRows(getRows(raw));
+        data.addRows(getRows(dataSource));
 
         var chartOptions = {
             height:30,
@@ -44,7 +43,16 @@
         chart.draw(data, chartOptions)
     }
 
-    google.load('visualization', '1.0', {'packages':['corechart']});
-    google.setOnLoadCallback(drawCommitActivity);
-})();
+    function drawCharts () {
+        $('.commit-activity').each(function () {
+            console.log(this, arguments);
+            var $this = $(this),
+                dataSource = $this.data('source'),
+                chartDiv = $('.chart', $this)[0];
+            drawCommitActivity(window[dataSource], chartDiv);
+        });
+    }
 
+    google.load('visualization', '1.0', {'packages':['corechart']});
+    google.setOnLoadCallback(drawCharts);
+})();

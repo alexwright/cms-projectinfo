@@ -1,12 +1,14 @@
 {% load sekizai_tags %}
-Project: {{ project.name }}
-<br />
-<div id="commit-activity" data-source="activity"></div>
+<h3>Project: {{ project.name }}</h3>
+<div class="commit-activity" data-source="activity_{{ project.get_safe_name }}">
+    <strong>Weekly Commit Activity:</strong>
+    <div class="chart"></div>
+</div>
 
 {% addtoblock "js" %}<script type="text/javascript" src="https://www.google.com/jsapi"></script>{% endaddtoblock %}
 {% addtoblock "js" %}
 <script>
-    window['activity'] = {{ activity_json|safe }};
+    window['activity_{{ project.get_safe_name }}'] = {{ activity_json|safe }};
 </script>
 <script src="{{ STATIC_URL }}/project_info/js/main.js"></script>
 {% endaddtoblock %}
